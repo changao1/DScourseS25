@@ -1,0 +1,8 @@
+system('curl -o dates.json "https://www.vizgr.org/historical-events/search.php?format=json&begin_date=00000101&end_date=20240209&lang=en"')
+system('cat dates.json')
+library(tidyverse)
+library(jsonlite)
+mylist <- fromJSON('dates.json')
+mydf <- bind_rows(mylist$result[-1])
+class(mydf)
+head(mydf,n=10)
