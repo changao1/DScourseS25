@@ -1,0 +1,121 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[left=1.1in,top=0.8in,right=1.1in,bottom=0.9in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+%\usepackage{graphicx}
+%\usepackage{ctex}
+%\usepackage{braket}
+%\usepackage{mathpazo}
+%\usepackage{minted}
+%\usepackage{xcolor} % to access the named colour LightGray
+%\definecolor{LightGray}{gray}{0.9}
+\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
+%\usepackage{graphicx}
+%\usepackage{background}
+\usepackage{setspace}
+\onehalfspacing
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{ECON5253}
+\rhead{Spring 2025}
+%\rhead{Chang Gao}
+\cfoot{\thepage}
+\usepackage{tabularray}
+\usepackage{float}
+\usepackage{graphicx}
+%\usepackage{codehigh}
+\usepackage[normalem]{ulem}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{siunitx}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+\begin{document}
+	\begin{center}
+		\noindent{\Large Problem Set 7}\smallskip\\
+		Chang Gao\smallskip\\
+	\end{center}
+\noindent{\bf\large Q6}\medskip\\
+The rate of missing log-wages is 24.93\%, I guess the \texttt{logwage} variable is MAR since the amount of missing value is a lot..
+
+The following table is the output for Q6.
+\begin{table}[htbp]
+	\centering
+	\begin{tblr}[         %% tabularray outer open
+		]                     %% tabularray outer close
+		{                     %% tabularray inner open
+			colspec={Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]},
+			hline{6}={1,2,3,4,5,6,7,8,9}{solid, black, 0.1em},
+		}                     %% tabularray inner close
+		\toprule
+		& Unique & Missing Pct. & Mean & SD & Min & Median & Max & Histogram \\ \midrule %% TinyTableHeader
+		logwage & 670 & 25 & 1.6 & 0.4 & 0.0 & 1.7 & 2.3 & \includegraphics[height=1em]{id72py7swuwrekip8zrnqa.png} \\
+		hgc & 16 & 0 & 13.1 & 2.5 & 0.0 & 12.0 & 18.0 & \includegraphics[height=1em]{idaebmze86p0o356mi78js.png} \\
+		tenure & 259 & 0 & 6.0 & 5.5 & 0.0 & 3.8 & 25.9 & \includegraphics[height=1em]{idphduirirc1nqd53lrp1m.png} \\
+		age & 13 & 0 & 39.2 & 3.1 & 34.0 & 39.0 & 46.0 & \includegraphics[height=1em]{idobnqw0sr3vr0mki1hobc.png} \\
+		&  & N & \% &  &  &  &  &  \\
+		college & college grad & 530 & 23.8 &  &  &  &  &  \\
+		& not college grad & 1699 & 76.2 &  &  &  &  &  \\
+		married & married & 1431 & 64.2 &  &  &  &  &  \\
+		& single & 798 & 35.8 &  &  &  &  &  \\
+		\bottomrule
+	\end{tblr}
+\end{table} 
+\newpage
+\noindent{\bf\large Q7}\medskip\\
+Multiple imputation provides estimates closer to the true value of 0.093 compared to mean imputation. The results from complete case analysis and imputing missing \texttt{logwages} with predicted values from the complete cases regression are almost identical. Compared to the true $\beta_1$, due to approximately 25\% of log wage values being missing, the complete case regression may have introduced selection bias.
+
+Impute by predicted values from regression seems to be not reliable as it is heavily affected by missing data; multiple imputation seems to be good in this case.
+\begin{table}[htbp]
+	\centering
+	\begin{talltblr}[         %% tabularray outer open
+		caption={Comparison of Imputation Methods for Missing Logwage Data},
+		note{}={+ p \num{< 0.1}, * p \num{< 0.05}, ** p \num{< 0.01}, *** p \num{< 0.001}},
+		]                     %% tabularray outer close
+		{                     %% tabularray inner open
+			colspec={Q[]Q[]Q[]Q[]Q[]},
+			column{2,3,4,5}={}{halign=c,},
+			column{1}={}{halign=l,},
+			hline{16}={1,2,3,4,5}{solid, black, 0.05em},
+		}                     %% tabularray inner close
+		\toprule
+		& Complete Cases & Mean Imputation & Regression Imputation & Multiple Imputation \\ \midrule %% TinyTableHeader
+		(Intercept) & \num{0.534}*** & \num{0.708}*** & \num{0.534}*** & \num{0.596}** \\
+		& (\num{0.146}) & (\num{0.116}) & (\num{0.112}) & (\num{0.174}) \\
+		hgc ($\beta_1$) & \num{0.062}*** & \num{0.050}*** & \num{0.062}*** & \num{0.059}*** \\
+		& (\num{0.005}) & (\num{0.004}) & (\num{0.004}) & (\num{0.006}) \\
+		collegenot college grad & \num{0.145}*** & \num{0.168}*** & \num{0.145}*** & \num{0.102}* \\
+		& (\num{0.034}) & (\num{0.026}) & (\num{0.025}) & (\num{0.037}) \\
+		tenure & \num{0.050}*** & \num{0.038}*** & \num{0.050}*** & \num{0.049}*** \\
+		& (\num{0.005}) & (\num{0.004}) & (\num{0.004}) & (\num{0.006}) \\
+		tenure\_sq & \num{-0.002}*** & \num{-0.001}*** & \num{-0.002}*** & \num{-0.002}*** \\
+		& (\num{0.000}) & (\num{0.000}) & (\num{0.000}) & (\num{0.000}) \\
+		age & \num{0.000} & \num{0.000} & \num{0.000} & \num{0.001} \\
+		& (\num{0.003}) & (\num{0.002}) & (\num{0.002}) & (\num{0.003}) \\
+		marriedsingle & \num{-0.022} & \num{-0.027}* & \num{-0.022}+ & \num{-0.020} \\
+		& (\num{0.018}) & (\num{0.014}) & (\num{0.013}) & (\num{0.018}) \\
+		Num.Obs. & \num{1669} & \num{2229} & \num{2229} & \num{2229} \\
+		R2 & \num{0.208} & \num{0.147} & \num{0.277} & \num{0.232} \\
+		R2 Adj. & \num{0.206} & \num{0.145} & \num{0.275} & \num{0.230} \\
+		\bottomrule
+	\end{talltblr}
+\end{table}
+\newpage
+\noindent{\bf\large Q8}\medskip\\
+For my ongoing China housing price study, I don't have a lot progress for traveling during spring break. Here are my progress:
+
+(1) Analysis of policy dummies (housing purchasing restriction and government restrictions on real estate developers' borrowing). I created purchasing restriction dummies for each city that are not completely identical across cities, taking the value of 1 when purchasing restrictions are in effect. I also constructed similar dummies for provincial-level purchasing restriction policies. The preliminary results show that city-level purchasing restrictions have a significant positive impact of approximately 3\% on commercial housing prices. The impact of provincial-level policies is not significant, which is understandable since it's generally lower-income provinces that issue purchasing restriction policies without sufficient implementation power. The government's lending restrictions on real estate developers have a significant impact of 0.05\% on housing prices, which is very low, and I'm not sure if there's an economic intuition for this. Regarding the 3\% positive impact of city-level purchasing restriction policies on housing prices, I need to further consider the causal relationship, because cities with rapidly rising prices are the ones that implement purchasing restriction policies, so the correlation coefficient between policy and housing prices can easily be positive. Do I need to decompose the suppressing effect of the policy on housing prices?
+
+(2) After consulting with Dr. Yang, I plan to conduct a simple analysis of the spillover effect of purchasing restrictions in large cities on housing prices in small cities, and to construct a cross-sectional instrumental variable related to the one-child policy from about 25 years ago. This one-child policy was strictly enforced in large cities, but in small cities, it was not strictly enforced and was even relaxed. Considering China's household registration system and frictions in population mobility between cities, this variable would affect the current working population, but may not directly affect housing prices, so it might be an appropriate instrumental variable. I will try this approach.
+
+(3) For the final project of this course, I plan to examine the distribution of household financial wealth from the CFPS (China Family Panel Survey) data, such as whether the distribution of household financial wealth has become more unequal from the past to the present across different cities? What are the differences in the rightward shift of these distributions among cities of different sizes?
+
+
+	
+\end{document}
+
+
+
+
+
