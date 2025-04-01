@@ -1,0 +1,86 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{tabularray}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{codehigh}
+\usepackage[normalem]{ulem}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{siunitx}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+
+
+\usepackage[left=1.1in,top=0.8in,right=1.1in,bottom=0.9in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+%\usepackage{graphicx}
+%\usepackage{ctex}
+%\usepackage{braket}
+%\usepackage{mathpazo}
+%\usepackage{minted}
+%\usepackage{xcolor} % to access the named colour LightGray
+%\definecolor{LightGray}{gray}{0.9}
+\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
+%\usepackage{graphicx}
+%\usepackage{background}
+\usepackage{setspace}
+\onehalfspacing
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{ECON5253}
+\rhead{Spring 2025}
+%\rhead{Chang Gao}
+\cfoot{\thepage}
+\begin{document}
+	\begin{center}
+		\noindent{\Large Problem Set 8}\smallskip\\
+		Chang Gao\smallskip\\
+	\end{center}
+\noindent{\bf\large Q9}\medskip\\
+The \texttt{lm()} OLS estimates are very similar to the true beta values used to generate the data. Please see next page for the table.
+\begin{table}[htbp]
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={OLS Regression Results},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]},
+column{2}={}{halign=c,},
+column{1}={}{halign=l,},
+hline{22}={1,2}{solid, black, 0.05em},
+}                     %% tabularray inner close
+\toprule
+& (1) \\ \midrule %% TinyTableHeader
+X1 & \num{1.501} \\
+& (\num{0.002}) \\
+X2 & \num{-0.996} \\
+& (\num{0.002}) \\
+X3 & \num{-0.249} \\
+& (\num{0.002}) \\
+X4 & \num{0.747} \\
+& (\num{0.002}) \\
+X5 & \num{3.502} \\
+& (\num{0.002}) \\
+X6 & \num{-1.999} \\
+& (\num{0.002}) \\
+X7 & \num{0.501} \\
+& (\num{0.002}) \\
+X8 & \num{0.999} \\
+& (\num{0.002}) \\
+X9 & \num{1.253} \\
+& (\num{0.002}) \\
+X10 & \num{1.999} \\
+& (\num{0.002}) \\
+Num.Obs. & \num{100000} \\
+R2 & \num{0.991} \\
+R2 Adj. & \num{0.991} \\
+AIC & \num{144993.2} \\
+BIC & \num{145097.9} \\
+Log.Lik. & \num{-72485.615} \\
+RMSE & \num{0.50} \\
+\bottomrule
+\end{talltblr}
+\end{table}
+\end{document}
