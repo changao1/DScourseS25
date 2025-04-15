@@ -1,0 +1,71 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[left=1.1in,top=0.8in,right=1.1in,bottom=0.9in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+%\usepackage{graphicx}
+%\usepackage{ctex}
+%\usepackage{braket}
+%\usepackage{mathpazo}
+%\usepackage{minted}
+%\usepackage{xcolor} % to access the named colour LightGray
+%\definecolor{LightGray}{gray}{0.9}
+\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
+%\usepackage{graphicx}
+%\usepackage{background}
+\usepackage{setspace}
+\onehalfspacing
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{ECON5253}
+\rhead{Spring 2025}
+%\rhead{Chang Gao}
+\cfoot{\thepage}
+\begin{document}
+	\begin{center}
+		\noindent{\Large Problem Set 10\footnote{I use paid version of Claude.ai to help with the problem set}}\smallskip\\
+		Chang Gao\smallskip\\
+	\end{center}
+	\noindent{\bf\large Q9}\medskip\\
+
+\begin{table}[htbp]
+	\centering
+	\caption{Test Performance}
+	\begin{tabular}{lc}
+		\hline
+		\textbf{Algorithm} & \textbf{Test Accuracy} \\
+		\hline
+		Logistic regression & 0.85 \\
+		Trees & 0.87 \\
+		Neural network & 0.84 \\
+		kNN & 0.84 \\
+		SVM & -- \\
+		\hline
+	\end{tabular}
+\end{table}
+
+
+\begin{table}[htbp]
+	\centering
+	\caption{Optimal Tuning Parameters}
+	\begin{tabular}{lcccc}
+		\hline
+		\textbf{Algorithm} & \textbf{penalty} & \textbf{cost\_complexity} & \textbf{tree\_depth/hidden\_units} & \textbf{min\_n/neighbors} \\
+		\hline
+		Logistic regression & 0.00 & -- & -- & -- \\
+		Trees & -- & 0.00 & 15.00 & 10.00 \\
+		Neural network & 0.01 & -- & 9.00 & -- \\
+		kNN & -- & -- & -- & 29.00 \\
+		SVM & -- & -- & -- & -- \\
+		\hline
+	\end{tabular}
+\end{table}
+\section{Performance Comparison Analysis}
+
+The test performance results show that the tree algorithm outperforms all other algorithms with a test accuracy of 87\%. The logistic regression is the second with 85\% test accuracy, kNN and neural network comes with test accuracy of 84\%. I didn't get outcome of SVM successfully.
+	
+	
+	
+	
+	
+\end{document}
