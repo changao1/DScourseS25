@@ -1,0 +1,183 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[left=1.1in,top=0.8in,right=1.1in,bottom=0.9in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+%\usepackage{graphicx}
+%\usepackage{ctex}
+%\usepackage{braket}
+%\usepackage{mathpazo}
+%\usepackage{minted}
+%\usepackage{xcolor} % to access the named colour LightGray
+%\definecolor{LightGray}{gray}{0.9}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue]{hyperref}
+
+%\usepackage{graphicx}
+%\usepackage{background}
+\usepackage{setspace}
+\usepackage[round]{natbib}
+\bibliographystyle{plainnat}
+\onehalfspacing
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{ECON5253}
+\rhead{Spring 2025}
+%\rhead{Chang Gao}
+\cfoot{\thepage}
+\begin{document}
+	\begin{center}
+		\noindent{\Large Problem Set 11}\smallskip\\
+		Chang Gao\footnote{I use chatgpt for proof checking and claude to solve the model numerically}\smallskip\\
+	\end{center}
+	
+	\noindent{\bf\large 1 Research Question}\medskip\\
+	I am still working on the draft for my final project. It is also part of my study on housing prices. The research aims to understand two economic relationships related to housing price changes in China:
+	
+	(1) The impact of demographic changes on housing prices. Specifically, has the One-Child Policy contributed to housing price boom and collapse through its effects on demographic structure?
+	
+	(2) How did the change in housing prices reshaped household wealth distribution?\smallskip\\
+	
+	\noindent{\bf\large 2 The Project for Data Science Class}\medskip\\
+	The second question regarding the relationship between housing prices and household wealth distribution will be my project for the data science class.\smallskip\\
+	
+	\noindent{\bf\large 3 Data Source}\medskip\\
+	The data sources include the \cite{cfps_database}(CFPS), a household-level survey covering 25 provinces. Another source is the housing price index data published by the \cite{nbs_housing_prices}, which includes monthly data for new and used residential housing in 70 large- and medium-sized cities, as well as houses of different sizes. I have published the cleaned dataset on GitHub: \url{https://github.com/changao1/70-China-cities-housing-index-data-by-national-bureau-of-statistics}. A total of 36 cities are included in both datasets.\smallskip\\
+	
+	\noindent{\bf\large 4 The Progress So Far..}\medskip\\
+	I have developed a two-region Overlapping Generations (OLG) model to capture the relationship between housing price changes and wealth redistribution, and I am currently working on improving the model with the help of Dr Shen.
+	
+	I am also extracting household wealth and housing wealth distribution statistics for 36 cities from the CFPS dataset.
+	
+	I am trying to map the data to the model, though I am still unsure how to do so in a structural equation. A reduced-form equation might be sufficient.\smallskip\\
+
+	\noindent{\bf\large 5 Model of Housing Price and Wealth Distribution}\medskip\\
+	\noindent{\bf 5.1 A two-region OLG model with housing investment and labor mobility}\smallskip\\
+	I develop a two-region overlapping generations model with heterogeneous agents that differ in their initial wealth. The model examines how labor mobility interacts with housing investment decisions across regions.\smallskip\\
+	\noindent{\bf 5.1.1 Demographics and Heterogeneity}\smallskip\\
+	Each region $i \in \{1, 2\}$ has an initial population of size $N_i$. Individuals live for two periods (young and old) and are heterogeneous in their initial wealth $a_0$, which follows a lognormal distribution:
+	\begin{align*}
+		a_0^i &\sim \text{LogNormal}(\mu_i, \sigma_i^2)
+	\end{align*}
+	
+	\noindent{\bf 5.1.2 Labor Market and Migration}\smallskip\\
+	Young individuals in region $i$ can choose to migrate to region $j$ at a cost $MC_i$. The labor supply in each region is determined by migration decisions:
+	\begin{align*}
+		L_1 &= (1-m_1)N_1 + m_2N_2 \\
+		L_2 &= (1-m_2)N_2 + m_1N_1
+	\end{align*}
+	where $m_i$ is the fraction of region $i$ residents who migrate to region $j$.
+	
+	Wages in each region are determined by the marginal product of labor:
+	\begin{align*}
+		w_i = A_i \theta L_i^{\theta-1}
+	\end{align*}
+	where $A_i$ is region-specific productivity and $\theta$ is the labor share parameter.\smallskip\\
+	\noindent{\bf 5.1.3 Preferences}\smallskip\\
+	Individuals maximize lifetime utility, which depends on consumption when young ($c_y$), consumption when old ($c_o$), and housing in both regions ($h_1$, $h_2$). For an individual born in region $i$ and working in region $j$, the utility function is:
+	\begin{align*}
+		U_{ij} = u(c_{y,ij}) + v(h_{jj}) + \alpha v(h_{jk}) + \beta[u(c_{o,ij}) + R_j(h_{jj}) + R_k(h_{jk})]
+	\end{align*}
+	where:
+	\begin{enumerate}
+		\item $u(\cdot)$ and $v(\cdot)$ are consumption and housing utility functions, respectively
+		\item $\alpha \in (0,1)$ is the discount factor for housing utility in the non-residence region
+		\item $\beta$ is the time discount factor
+		\item $R_j(\cdot)$ is the housing return function in region $j$
+		\item $h_{jk}$ represents housing investment in region $k$ by someone working in region $j$
+	\end{enumerate}
+	
+	I use CRRA utility functions: $u(c) = \frac{c^{1-\gamma}-1}{1-\gamma}$ and $v(h) = \frac{h^{1-\gamma}-1}{1-\gamma}$.\smallskip\\
+	\noindent{\bf 5.1.4 Budget Constraints}\smallskip\\
+	Young period:
+	\begin{align*}
+		w_j + a_0 = c_{y,ij} + p_1 h_{j1} + p_2 h_{j2} + s_{ij} + MC_i \cdot \mathbb{I}(i \neq j)
+	\end{align*}
+	
+	Old period:
+	\begin{align*}
+		(1+r)s_{ij} + (1+\rho_1)p_1h_{j1} + (1+\rho_2)p_2h_{j2} = c_{o,ij}
+	\end{align*}
+	where:
+	\begin{enumerate}
+		\item $p_i$ is the housing price in region $i$
+		\item $\rho_i$ is the housing appreciation rate in region $i$
+		\item $r$ is the interest rate on savings $s_{ij}$
+		\item $\mathbb{I}(i \neq j)$ is an indicator function equal to 1 if the individual migrates
+	\end{enumerate}
+	\noindent{\bf 5.1.5 Migration Decision}\smallskip\\
+	Individuals decide whether to migrate by comparing the utility of staying versus moving:
+	\begin{align*}
+		m_i(a_0) = 
+		\begin{cases}
+			1 & \text{if } U_{ij}(a_0) - U_{ii}(a_0) > 0 \\
+			0 & \text{otherwise}
+		\end{cases}
+	\end{align*}
+	
+	The aggregate migration rate is the weighted average across the wealth distribution:
+	\begin{align*}
+		m_i = \int m_i(a_0) f_i(a_0) da_0
+	\end{align*}
+	where $f_i(a_0)$ is the PDF of the wealth distribution in region $i$.\smallskip\\
+	\noindent{\bf 5.1.6 Housing Market Clearing}\smallskip\\
+	The housing markets clear when demand equals supply in each region:
+	\begin{align*}
+		H_1 &= \sum_{i,j} \int h_{j1}(a_0) \cdot L_{ij} \cdot f_i(a_0) da_0 \\
+		H_2 &= \sum_{i,j} \int h_{j2}(a_0) \cdot L_{ij} \cdot f_i(a_0) da_0
+	\end{align*}
+	where $L_{ij}$ is the population born in region $i$ and working in region $j$.\smallskip\\
+	\noindent{\bf 5.2 Equilibrium Definition}\smallskip\\
+	An equilibrium in this economy consists of: Housing prices $(p_1, p_2)$; wages $(w_1, w_2)$, migration rates $(m_1, m_2)$, individual decision rules for consumption, housing investment, and savings. 
+	
+	Such that: Individuals maximize utility; labor markets clear (wages equal marginal product); housing markets clear; migration decisions are optimal given wages and prices.
+	
+	The model can be solved numerically through iterations.\smallskip\\
+	\noindent{\bf 5.3 Calibration (Simple)}\smallskip\\
+	I calibrated the model with {\color{red}some common parameters as well as some from intuition}, and considered a negative housing-price shock after a positive one to capture the phenomenon in China. With Region 1 being large city with higher moving cost from Region 2 to 1, and higher appreciation and depreciation when housing price change.
+	
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{lll}
+			\toprule
+			Parameter & Symbol & Value \\
+			\midrule
+			Time discount factor & $\beta$ & 0.96 \\
+			Housing utility discount & $\alpha$ & 0.7 \\
+			CRRA parameter & $\gamma$ & 0.5 \\
+			Region 1 productivity & $A_1$ & 1.2 \\
+			Region 2 productivity & $A_2$ & 1.0 \\
+			Production function labor share & $\theta$ & 0.67 \\
+			Housing supply in region 1 & $H_1$ & 1.0 \\
+			Housing supply in region 2 & $H_2$ & 1.0 \\
+			Period 0--1, housing appreciation rate in region 1 & $\rho_1$ & 0.2 \\
+			Period 0--1, housing appreciation rate in region 2 & $\rho_2$ & 0.08 \\
+			Period 1--2, housing depreciation rate in region 1 & $\rho_1$ & -0.15 \\
+			Period 1--2, housing depreciation rate in region 2 & $\rho_2$ & -0.1 \\
+			Migration cost from region 1 & $MC_1$ & 0.2\\
+			Migration cost from region 2 & $MC_2$ & 0.05\\
+			Interest rate & $r$ & 0.03 \\
+			Region 1 wealth distribution mean (log) & $\mu_1$ & 0.0 \\
+			Region 1 wealth distribution std. dev. (log) & $\sigma_1$ & 0.5 \\
+			Region 2 wealth distribution mean (log) & $\mu_2$ & -0.2 \\
+			Region 2 wealth distribution std. dev. (log) & $\sigma_2$ & 0.5 \\
+			\bottomrule
+		\end{tabular}
+		\caption{Baseline parameter values}
+		\label{tab:parameters}
+	\end{table}
+	\begin{center}
+		\includegraphics[width=0.75\textwidth]{1111.png}
+		\includegraphics[width=0.75\textwidth]{2222.png}
+	\end{center}
+	The calibration result (of course, heavily rely on the parameters) shows that a positive housing price shock makes the wealth distribution to have a fatter tail, while a negative housing price shock won't let the wealth distribution goes back to before.\smallskip\\
+	\noindent{\bf 6 Map Model to Data or Just Reduced-form Regression?}\smallskip\\
+	\begin{align*}
+		\text{Wealth Inequality}_{i,t} = &\beta_0 + \beta_1 \text{Housing Price Change}_{i,t} + \beta_2 \text{Housing Share}_{i,t} \\&+ \sum_{j} \gamma_j \text{Controls}_{j,i,t} + \varepsilon_{i,t}
+	\end{align*}
+	{\color{red}Question: 1. I am expected to get data of dist. of wealth \& housing wealth from CFPS, how could I use them in regression or empirical framework?}\medskip\\
+	
+\bibliography{PS11_Gao}
+	
+	
+	
+\end{document}
