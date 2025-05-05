@@ -1,0 +1,450 @@
+\documentclass[12pt,english]{article}
+\usepackage{mathptmx}
+
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{darkblue}{RGB}{0.,0.,139.}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{subfigure}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{setspace}
+
+\usepackage{float}
+\usepackage[authoryear]{natbib}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage[flushleft]{threeparttable}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{pdflscape}
+\usepackage[unicode=true,pdfusetitle,
+bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+breaklinks=true,pdfborder={0 0 0},backref=false,
+colorlinks,citecolor=black,filecolor=black,
+linkcolor=black,urlcolor=black]
+{hyperref}
+\usepackage[all]{hypcap} % Links point to top of image, builds on hyperref
+\usepackage{breakurl}    % Allows urls to wrap, including hyperref
+
+\linespread{2}
+
+\begin{document}
+	
+	\begin{singlespace}
+		\title{Staggered City Level Purchasing Restrictions, Housing Booming, and Collapse in China\thanks{I use claude.ai and ChatGPT to: generate code for data cleaning, processing and visualization in Python and Stata, summarize part of literature, do the proof check. All the errors are my own.}}
+	\end{singlespace}
+	
+	\author{Chang Gao\thanks{Department of Economics, University of Oklahoma.\
+			E-mail~address:~\href{mailto:chang.gao@ou.edu}{chang.gao@ou.edu}}}
+	
+	 \date{\today}
+
+	
+	\maketitle
+	
+	\begin{abstract}
+		\begin{singlespace}
+This paper examines the impact of new home purchase restrictions on housing prices in post-2010 urban China. I compile a monthly dataset of housing price indices for 70 major cities and construct a city-level policy dummy variable capturing the staggered introduction of purchase restrictions. Using a Staggered Difference-in-Differences -- Instrument Variable framework, based on the assumption that fertility rate twenty years ago will affect labor force today directly but will not affect the housing price directly, I find that housing prices begin to fall sharply several months before the policy is officially implemented and decline cumulatively by 16\% -- 19\% over the subsequent two years. Although the IV part failed. This framework is intend to link demographic change, housing price and policy inventions under a same framework.
+
+		\end{singlespace}
+		
+	\end{abstract}
+	\vfill{}
+	
+	
+	\pagebreak{}
+	
+	
+	\section{Introduction}\label{sec:intro}
+	\subsection{Housing Booming and Financialization}
+	The financialization of China's real estate is reflected in the fact that a significant portion of total property transactions are for investment rather than residential purposes, resulting in the phenomenon of single households purchasing multiple properties. From a micro perspective, as real estate is a durable good with a high investment threshold, this allows originally wealthy households to use their excess wealth to buy second, third, or even more houses (for investment rather than living).
+	
+	Simultaneously, Chinese residents have an inelastic demand for housing prices because property ownership is tied to social welfare. For example, Beijing has China's most advanced medical care and education, with significantly higher college admission rates (elite universities reserve many more spots for Beijing high school students, several times more than for students from less developed regions). These social welfare benefits can usually only be accessed by local residents. The main criterion for determining local residency is property ownership; renting does not qualify one as a local resident. These policies lead people to choose mortgage loans to purchase houses even if their income and wealth levels are not sufficient, resulting in a very high and inelastic demand for home purchases for the past two decades.
+	
+	Another background factor is that China, due to joining the WTO and its low labor costs, became a major exporting country. Years of continuous trade surpluses increased its foreign exchange reserves, which meant that the central bank increased the domestic money base supply correspondingly. Considering the multiplier effect of currency issuance, the increase in domestic currency supply affected domestic asset prices, primarily reflected in real estate. While the price of equity assets has hardly increased, this is because China's stock market has struggled to recover since the 2007 subprime crisis. As of August 31 in 2024, the Shanghai Composite Index stands at only 2846 points, which is almost half of its peak before the 2007 subprime crisis. In other words, since the U.S. subprime crisis, overall investments in China's stock market have not yielded positive returns.
+	
+	Figure 1 presents a comparative analysis of housing price trends across various Chinese cities, the U.S. Case -- Shiller 20-City Index, the S\&P 500, and China’s Shanghai Composite Index since 2010. The figure reveals that the returns on housing investments in China and the United States have been broadly comparable, whereas the U.S. stock market has substantially outperformed its Chinese counterpart.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=15cm]{comprehensive_market_comparison.pdf}
+		\caption{Return of Stock \& Housing Market Comparison between US \& China}
+		\label{fig:1_1}
+	\end{figure}
+	Figure 2, based on household-level survey data, compares housing market values and household net wealth in Shanghai in 2022. The distribution of assets is right-skewed, and housing constitutes a significant portion of household net wealth in China. For most middle-income households, homeownership is achieved through mortgage financing. This highlights the fact that Chinese households primarily hold their wealth in the form of housing, accounting for approximately 80\%.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=15cm]{shanghai_property_asset_comparison_2022.eps}
+		\caption{Comparison between Housing Market Value \& Total Net Asset of Shanghai in 2022}
+		\label{fig:1_2}
+	\end{figure}
+	\noindent\textbf{Notes:} Further details on the data used in Figures 1 and 2 will be provided in the Data section\medskip\\
+	
+	Taking inflation into account, China's real interest rates have shown a long-term downward trend (\citealp{nabar2011targets}). Furthermore, considering the poor performance of the stock market, there has been an overall negative return rate in the long term. According to \cite{nabar2011targets} IMF working paper, a counter-intuitive phenomenon is that Chinese residents have been increasing their savings even as real interest rates decline, seemingly aiming for savings targets. In recent years, more and more people have turned to purchasing real estate to combat inflation, ultimately leading to a phenomenon where everyone is buying property.
+	
+	At the same time, compared to the United States, China's property tax is very low. U.S. local governments collect property taxes amounting to 3\% of GDP annually, with most of this revenue used for public school expenses, while China hardly collects any property tax. Rather, Chinese local governments raise funds by selling land, or more precisely, selling land use rights. Land in China is not privately owned; homebuyers and real estate developers only have usage rights.
+	
+	Moreover, the Chinese government is keen on pursuing nominally rapid development, with higher GDP growth levels viewed as a performance evaluation standard for officials (\citealp{li2019target}). These factors have driven Chinese officials to choose infrastructure construction as major way to promote rapid GDP growth. Even in the face of an aging population, the local governments have continued to plan and construct many new schools, hospitals, and a high-speed rail network. However, these newly built infrastructures cannot serve empty cities. Recalling the high demand for housing I mentioned earlier, the Chinese government, while constructing infrastructure in these new cities, has also been selling land to real estate developers. 
+	
+	As housing prices rapidly rose due to various speculative demands, it led to greater wealth disparities (\citealp{cao2018housing}, \citealp{zhou2016income}). In other words, China's rapid economic growth has led to rising income inequality due to high returns on capital compared to wages. The characteristic of financialization is non-operational investments. Although these investments have increased residents' wealth, they have not improved the quality of social production, which could be unsustainable. This is what we want to verify in this paper.
+	
+	"Houses are for living in, not for speculation." President Xi Jinping said at the 2016 Chinese Communist Party Central Economic Work Meeting that the problem of real estate being used as investment targets in China's real estate market should be prevented. In fact, the financialization of real estate has played an important role in China's rapid economic development over the past decade. While expanding residents' wealth and income, the increased land demand from real estate expansion has also led to a rapid increase in the Chinese government's fiscal income -- as local governments obtain fiscal income by selling land to real estate developers.
+	\subsection{Housing Crash}
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=15cm]{new_house_price_index_cumulative.pdf}
+		\caption{70 Major City New Residential Housing Price (Index) of China}
+		\label{fig:1_3}
+	\end{figure}
+	Let's rewind to 2020 when the total market value of the US stock market stood at around \$31.3 trillion. During that period, the real estate market value in Shenzhen, a China city comparable to Santa Clara County in California, exceeded 15 trillion CNY. Applying the exchange rate at that time (1 USD = 6.4765 CNY), Shenzhen's real estate market value was approximately \$2.3 trillion USD.
+	
+	Fast forward to 2023, the US real estate market is currently estimated at about \$52 trillion, according to Zillow. The combined real estate market values of several major Chinese cities could potentially surpass that of the entire United States. In 2019, China's GDP was 99.1 trillion CNY, roughly equivalent to \$15 trillion USD.
+	
+	\cite{glaeser2017real} empirically studied the existence and future trends of bubbles in China's real estate market. They believe that signs of a bubble exist, such as rapidly rising housing prices, a large number of newly built houses, and high vacancy rates. However, compared to the U.S. subprime mortgage crisis, China's situation is somewhat different. Before the subprime crisis, the U.S. housing market had higher leverage, and buyers were mostly young people, while in China, middle-aged and elderly people are more prevalent, and investment demand is an important factor driving up housing prices. Their research suggests that the government has significant control over land and housing supply. If the government restricts supply, housing prices may remain high. If supply is relaxed, future housing prices may fall. However, they still predict that in China, it will be very difficult for housing prices in first-tier cities to maintain an annual growth rate of more than 3\% in the future. The land supply by local governments, which they mentioned, has become increasingly important in subsequent studies, such as \cite{xiong2018mandarin}, where the sale of land by local governments played a crucial role in China's housing boom. In this paper, I will also propose my baseline model based on the land sales and profit-seeking decisions of local governments.
+	
+	Some literature mentions the harm caused by the housing boom. For example, \cite{wan2024transmission} empirically found that the housing boom crowded out investment in the non-housing sector, with more investment being used in the housing sector. Similarly, \cite{chen2017real} found similar results, but what was crowded out was bank lending to those who did not hold land, while banks holding land received more credit. The rapid rise in commercial land prices has induced manufacturing and service enterprises to purchase more commercial land unrelated to their core business, while reducing other investment and innovation activities. Of course, in \cite{chen2017real}, rising real estate prices improved the collateral capacity of enterprises and thus promoted investment. However, the ultimate result is that as land prices rise by 100 percentage points, resource allocation efficiency decreases, and total factor productivity will lose 26\%.
+	
+	Recently, the Chinese Family Panel Survey reveals that residential housing constitutes over 80\% of the wealth of urban Chinese households. The increase in asset holding in Chinese households through debt essentially involves borrowing against income for the next several decades. This year, some regions in China have already witnessed a 40\% decline in property prices, and I've observed a decrease in my parents' income as well (they are government employees, and their wages were stable and gradually increasing in the past). Research attention has shifted gradually towards systemic risks that could trigger a major crisis, \cite{gao2020economic} analyze the economic consequences of housing speculation during the US housing boom in the 2000s by using change in state capital gains taxation as an instrument, they find housing speculation amplify the boom in 2004-2006 and downturn in 2007-2009 of housing price. Some documented facts, \cite{liu2018china}; \cite{song2018risks} points out that and local governments have played an important role in China’s economic development as well as in the financial risks related to rising real estate prices and rising leverage across China.
+	
+	Compared to developing countries, financial markets in developed nations are often more mature, with greater market transparency, and well-established regulations. The subprime mortgage crisis in the United States and Japan's lost decade (since the 1990s) were both consequences of excessive credit and leverage leading to bad loans and financial institution crises. In contrast to the US and Japan, China's market structure has distinct differences: the down payment requirement for real estate purchases in China is 30\%, whereas it was 10\% before the subprime crisis in the United States; on the eve of the burst of the economic bubble in Japan in the 1990s, many Japanese companies used their land as collateral for loans to expand investments; in present-day China, the situation is similar.
+	
+	Since the 1990s, China's consistently loose monetary policy and its unstable stock market (with a long-term investment return relatively lower compared to other major economies) make it challenging for people to choose investment options outside of real estate. According to data from China's Household Finance Survey, residential housing constitutes over 80\% of the wealth of urban Chinese households. Overall, high leverage and concentration of investments make the risks in China's real estate market greater than those in mature markets. I would like to explore the potential factors driving a crisis in the Chinese real estate market.
+	%	\begin{figure}[htbp]
+		%		\centering
+		%		\includegraphics[width=12cm]{youth.png}
+		%		\caption{Recent China Youth Unemployment Rate}
+		%		\label{fig:2_1}
+		%	\end{figure}
+	Similar to the consequences of financialization mentioned in some literature (\citealp{van2013financialization}), the financialization of real estate in China, while bringing more income, has reduced the proportion of investment in the real economy. This has made the economy more vulnerable and increased the wealth gap.
+	
+	Currently, predictions about China's economic vulnerability are gradually being validated. Even after Xi's speech, the Chinese government has not found a suitable solution for the real estate market, as reflected in the rapidly falling property prices in China after 2021. Ultimately, Chinese policymakers failed to find an effective way to address this issue, and the market crashed. This was accompanied by declining disposable income for residents, salary reductions in state-owned enterprises and government agencies, and high unemployment rates.
+	
+	According to reports from China's National Bureau of Statistics, from January to July 2024, the sales area of newly constructed commercial residential buildings decreased by 21.1\% compared to the previous year. The sales value of newly constructed commercial residential buildings decreased by 25.9\% compared to the previous year. The price drop in first-tier cities like Beijing, Shanghai, Guangzhou, and Shenzhen was relatively small, usually around 5-10\%. The real estate markets in these cities remain relatively stable due to high demand. Many second and third-tier cities experienced more significant price drops, with some cities potentially seeing declines of 15-25\%. The real estate in these cities is more prone to bubbles. Real estate development investment also declined, with a year-on-year decrease possibly around 10-20\%. Overall, the decline in developed regions was smaller than in less developed areas.
+	\section{Literature Review}\label{sec:litreview}
+	\subsection{Housing Boom and Collapse in China}
+	\cite{fang2016demystifying} empirically found that from 2003 to 2013, the average annual growth rate of housing prices in China's first-tier cities was 15.9\%, 10.5\% in second-tier cities, and 7.9\% in third-tier cities. This rate of housing price increase far exceeds that of the United States and Japan during their respective real estate bubble periods. During the same period, the growth rate of per capita disposable income in urban areas was 9\%, and 6\% in first-tier cities. One of their important findings is that among mortgage borrowers, 30\% are at the 25th percentile of income level. They were not squeezed out of the market due to the rapid rise in housing prices, instead choosing to take on mortgage loans to purchase homes. The authors suggest understanding the housing boom from the perspective of China's distorted financial system, such as low interest rates and local governments selling land to generate revenue. These views support my consideration of local governments' strong motivation to sell land for profit in the general equilibrium.
+	
+	\cite{luo2023shortage} used a model that includes two regional small open economies to explore China's housing boom. They find that China's real estate has the attribute of a safe asset. In the case of underdeveloped financial markets leading to an insufficient supply of safe assets, real estate has become a means of value storage, thus pushing up housing prices. Their model provides a good intuition about the mechanism of housing boom transmission between different regions due to housing purchase policies. Constrained by the nature of my model, I cannot incorporate their assumptions, but this can be a good complement to my research, as the intuition is similar.
+	
+	\cite{chen2017great} investigate the phenomenal rate of return to capital and the alarmingly high vacancy rate. They explain the paradox of a self-fulfilling housing bubble created by speculative investment behavior that grows much faster than national income during an economic transition. \cite{jiang2022china} extend this work by linking the sale of land and infrastructure investment (as a factor of productivity) through government income and spending. They find that a housing bubble also helps the government accumulate more infrastructure, raising the productivity and production of the non-housing sector. This causes labor to flow from the non-housing sector into the housing sector. Through calibrated models, they conduct experiments and discover short-term negative but long-term positive impacts of a bubble bursting.
+	
+	However, there could be some limitations in \cite{chen2017great}  and \cite{jiang2022china}. They were using representative agent economies, failing to capture the heterogeneity of households as investor. This makes their framework less capable of predicting the financial accelerator phenomenon (\citealp{bernanke1999financial}, henceforth BGG) when shocks occur. This discrepancy is inconsistent with the recent rapid decline in housing prices in some Chinese cities. Their models also do not capture the structural dynamics of China's real estate market adequately, such as leveraging financing.
+	
+	\subsection{Demography Change and One-Child Policy}
+	
+	\subsubsection{Population Dynamics Induced by the One-Child Policy}
+	China’s one-child policy (1979 -- 2015) drove fertility far below replacement, yielding a rapidly aging population and stalled labor growth. Even after the policy’s relaxation, birthrates have remained weak (\citealp{imf2022china}), so China’s over‑65 population has swelled. For example, the population aged 65+ reached nearly 190.6 million (about 13\%) by 2020 (\citealp{fu2023demographic}). Meanwhile, China’s working-age cohort has begun to shrink (peaking around the early 2010s). Researchers note that these changes are already slowing labor-force growth and raising old-age dependency, straining pensions and reducing the pool of young workers. In short, China has moved quickly from a “demographic dividend” to a “demographic drag,” and these trends create new patterns of consumption and investment demand.
+	
+	With severe gender imbalance, unmarried men compete by purchasing homes. \cite{wei2012home} show that housing functions as a “status good” in China’s marriage market. In regions with more men (higher sex ratios), families buy larger homes to signal wealth.
+	
+	\cite{wei2016demand} find that when women are scarce, families demand higher bride-price (dowry), often tied to housing. In their analysis, “scarcer women help push up the dowry price including the housing price.”
+	
+	With one child (often a son), parents save excessively to outcompete others. \cite{wei2011competitive} document a new “competitive saving” motive: as the male‐to‐female ratio rose, Chinese parents with sons dramatically increased their savings to enhance the son’s marriage value. This effect spilled over economy-wide, accounting for roughly half of China’s household saving‐rate rise in 1990–2007.
+	
+	Empirical studies note that single-child households face a high per-child housing cost. In crowded cities, raising even one child often means moving to better or larger housing. For example, \cite{fu2023demographic} point out that in urban China, a child “places an unusually high financial burden on his parents as it necessitates more suitable accommodations in an already crowded and expensive real-estate market.”
+	
+	Based on these studies, the one-child policy initially boosted housing demand in the short term through increased marriage-related pressure, stronger saving motives, and a household preference for real estate investment, thereby pushing up housing prices. In the long run, however, the aging population and persistently low fertility rates may lead to shrinking demand and structural adjustments in the housing market.
+	
+	\subsubsection*{Summary Table for China's One-Child Policy}
+	\begin{table}[H]
+		\centering
+		\caption{Timeline of China's One-Child Policy}
+		\begin{tabular}{c|c}
+			\toprule
+			\textbf{Year} & \textbf{Policy} \\
+			\midrule
+			1949-1970s & Voluntary birth control and family planning promotion \\
+			\midrule
+			1978 & Voluntary program encouraging no more than two children \\
+			\midrule
+			1979 & Initial implementation of one-child policy \\
+			\midrule
+			\color{blue}{1980 Sep 25} & \color{blue}{Official nationwide standardization of one-child policy} \\
+			\midrule
+			1982 & One-child restriction formally written into China's constitution \\
+			\midrule
+			1983 & Intensive enforcement period with sterilization campaigns \\
+			\midrule
+			1984 & Relaxation allowing rural families a second child if firstborn was female \\
+			\midrule
+			1980s mid & Further exceptions for various groups introduced \\
+			\midrule
+			2013 Nov & Policy relaxed to allow two children if one parent was an only child \\
+			\midrule
+			{\color{red}2015 Oct 29} & {\color{red}Announcement of the end of one-child policy}\\
+			\midrule
+			2016 Jan & Implementation of universal two-child policy \\
+			\midrule
+			2021 May & Shift to three-child policy \\
+			\midrule
+			2021 Jul & Removal of all limits and introduction of pro-birth incentives \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	\textbf{Notes:}
+	
+	\textbf{Ethnic Minority Exceptions:} Ethnic minority groups with populations under 10 million were generally exempt from the strict one-child limitation throughout the policy period. This included most of China's 55 officially recognized minority groups.
+	
+	\textbf{Regional Implementation Variations:} 
+	\begin{enumerate}
+		\item \textbf{Urban Areas:} Policy was enforced more strictly in cities, where nuclear families were more common and compliance was higher
+		\item \textbf{Rural Areas:} More lenient enforcement due to stronger resistance from traditional agricultural communities that relied on larger families for labor
+		\item \textbf{Provincial Differences:} Local authorities had significant discretion in policy implementation, creating varied experiences across provinces, particularly in determining exceptions and penalties
+		\item \textbf{By 1984:} Only approximately 35.4\% of the population was subject to the original strict one-child limitation due to various exceptions
+	\end{enumerate}
+	
+	\subsection{Combination of Staggered Difference-in-Differences and Instrumental Variable}
+	Recent advances in econometrics have explored the combination of staggered difference-in-differences (DiD) and instrumental variable (IV) strategies within a unified empirical framework. This hybrid approach aims to strengthen causal identification in the presence of staggered treatment timing and endogenous policy adoption.
+	
+	\cite{hudson2017} introduce the ``Difference-in-Differences Instrumental Variables'' (DDIV) framework, in which a two-stage approach is used. Specifically, the first-stage regression estimates the impact of an instrument on the treatment variable in a DiD setting, and the second stage regresses outcomes on the instrumented treatment. The DDIV estimator can be written as:
+	\[
+	\beta = \frac{E[Y_{i1} - Y_{i0} \mid Z_i = 1] - E[Y_{i1} - Y_{i0} \mid Z_i = 0]}{E[S_{i1} - S_{i0} \mid Z_i = 1] - E[S_{i1} - S_{i0} \mid Z_i = 0]}
+	\]
+	This estimator relies on the standard exclusion restriction for the instrument, along with DiD-style parallel trends assumptions for both treatment and outcome variables.
+	
+	\cite{ye2023} propose an IV-DiD framework in the potential outcomes setup, suitable for settings with unmeasured confounding. They develop Wald-type and semiparametric estimators that identify average and conditional treatment effects under assumptions of no defiers, parallel trends, and exclusion of the instrument from potential outcomes.
+	
+	\cite{miyaji2024a} formalizes the concept of ``Local Average Treatment Effect on the Treated'' (LATET) in a 2x2 DiD setting with an IV. The identification relies on monotonic treatment selection, exclusion restriction, and parallel trends. Miyaji derives a Wald-DiD estimator analogous to the DDIV framework and extends it to staggered settings under additional assumptions.
+	
+	\cite{miyaji2024b} further analyzes the two-way fixed effects instrumental variable (TWFE-IV) regression in staggered DiD-IV designs. He shows that the standard TWFE-2SLS estimator aggregates group-time-specific Wald-DiD estimators, and hence, its interpretation depends on homogeneous effects and invariant first-stage relevance across groups.
+	
+	Other methodological discussions, including those in \cite{de2023two} and \cite{borusyak2024revisiting}, raise caution about combining IV with DiD, especially under treatment effect heterogeneity and staggered adoption. They suggest that common two-stage least squares (2SLS) approaches may be invalid unless strict assumptions on time-invariant compliance and homogeneous trends are satisfied.
+	
+	Though relatively rare, some empirical studies implicitly adopt this combined approach. For instance, \cite{duflo2001} and \cite{black2005} utilize staggered policy rollout across regions as an instrument to estimate treatment effects. While not labeled explicitly as ``DiD-IV,'' these studies fit into the DDIV framework conceptually, using TWFE regressions with policy timing as instruments.
+	
+	Nevertheless, combining IV and staggered DiD in the same regression requires careful validation of identification assumptions, including the compatibility of the IV with group-specific trends. Most empirical papers either rely on IV or DiD independently, reflecting the complexity of aligning assumptions required for both strategies simultaneously.
+	
+	\section{Data}\label{sec:data}
+	Several data source are used in this paper:
+	
+	The 70 city monthly price index published \cite{nbs_housing_prices}, although publicly available but hard to clean\footnote{The housing price index data is published on: \href{https://github.com/changao1/70-China-cities-housing-index-data-by-national-bureau-of-statistics}{https://github.com/changao1/70-China-cities-housing-index-data-by-national-bureau-of-statistics}} for the data format change from time to time.
+	
+	China Family Panel Survey (CFPS) data published by \cite{cfps_database} is also used to measure the income, housing assets and wealth distribution in China.
+	
+	Two type of policy dummies are also created for controlling policy shocks on housing price.
+	\subsection{70 Major City Monthly Housing Price Index from 2011 to 2024}
+	The residential apartment settlement price index data from 70 major Chinese cities provides a comprehensive view of China's housing market from 2011 to 2024. This official dataset, published by the National Bureau of Statistics of China, contains nearly 11,760 monthly observations with less than 1\% missing values. Each observation includes eight transaction price indices covering new, used, and size-categorized properties (small, medium, and large for both new and used housing). These 70 cities represent approximately 40\% of China's GDP, 17\% of its population, and 50\% of real estate investment as of 2017 according to \cite{lu2021time}, making this dataset highly representative of China's property sector.
+	
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=15cm]{second_hand_price_index_cumulative.pdf}
+		\caption{Data Example: 70 Major City Used Residential Housing Price (Index) of China}
+		\label{fig:1_4}
+	\end{figure}
+	
+	\subsection{Policy Dummy of City Level Purchasing Restrictions}
+	Market trends reveal distinct patterns in both new housing and second-hand housing markets as shown in the cumulative price indices. Government interventions have significantly influenced these markets, particularly through two major policies. The major policy implemented purchasing restrictions around 2016, which increased down payment requirements, restricted loan access for multiple property owners, and limited improper capital inflows, especially in larger cities. These measures notably slowed market growth in the second half of 2016.
+	
+	Different cities initiated or loosen purchasing restrictions at different times, I collected and created a panel-level dummies of purchasing restrictions for 69 of 70 cities we have housing data with.
+	\begin{enumerate}
+		\item Adopt purchasing restriction or not at time $t$ for city $i$;
+		\item Small cities response slower than larger cities.
+	\end{enumerate}
+	\subsection{Policy Dummy of Real Estate Developer Borrowing Constraint}
+	The second major intervention was the "Three Red Lines" policy announced in August 2020 and implemented in January 2021, which aimed to de-leverage the property sector and ensure financial stability. This policy established three critical thresholds for developers: Debt-to-Cash ratio must not exceed 100\% (to prevent short-term liquidity risk); Net Gearing must remain below 100\% (to control leverage versus equity); and Liabilities-to-Asset ratio (excluding advance receipts) must stay under 70\% (to limit reliance on debt financing).
+	
+	I created two national-level policy dummy based on timing, the first dummy is based on before and after the announcement of constraint, the second one is based on before and after the policy's adoption. These dummies was omitted later for its co-linearity with time fixed effect dummy.
+	
+	\subsection{CFPS Data}
+	The China Family Panel Survey (CFPS) database is a household-level panel dataset conducted biennially from 2010 to 2022. In this study, I use the household financial module. The dataset covers approximately 25 provinces and between 150 to 180 cities, depending on the survey year. After data cleaning, I identified 35 cities that overlap with those in the 70 Major Cities housing price dataset, and thus I focus primarily on these cities.
+	
+	From the CFPS household finance data, I construct both balanced and unbalanced panel datasets. The key variables include total household expenditure, wage income, passive property income, transfer income, total household income, housing market value, total mortgage balance, the market value of other (non-owner-occupied) properties, total (net) household assets (as a measure of wealth), operating income, financial asset holdings, total cash and deposits, and non-mortgage liabilities.
+	
+	The unbalanced panel is used to measure the within city characteristics change from time to time. This is done by getting the distribution of wage, housing market value, financial assets, etc.. And calculating the Gini coefficient. The following figure is one example of housing market value and total net asset (wealth) distribution of two cities, Yichang and Shanghai, in 2010 and 2022, respectively.
+	
+	\begin{figure}[H]
+		\centering
+		\subfigure[Yichang in 2010]{\includegraphics[width=0.45\textwidth]{yichang_property_asset_comparison_2010.eps}}
+		\subfigure[Yichang in 2022]{\includegraphics[width=0.45\textwidth]{yichang_property_asset_comparison_2022.eps}}
+		\subfigure[Shanghai in 2010]{\includegraphics[width=0.45\textwidth]{shanghai_property_asset_comparison_2010.eps}}
+		\subfigure[Shanghai in 2022]{\includegraphics[width=0.45\textwidth]{shanghai_property_asset_comparison_2022.eps}}
+		\caption{Example of Housing Market Value and Wealth Distributions}
+	\end{figure}
+	
+	The selection of these two cities is motivated by their contrasting characteristics: Yichang is a third-tier inland city in China, generally unknown internationally and potentially representative of regions outside the economically advanced coastal areas. In contrast, Shanghai is China’s largest and most economically dynamic city.
+	
+	Please note that the axes in these figures use different units, but a common pattern emerges: both housing values and total household wealth exhibit right-skewed distributions. Based on these distributions, the calculated Gini coefficients indicate that wealth inequality in Yichang increased from 2010 to 2022, whereas Shanghai did not experience a significant rise in inequality.
+	
+	The expanding blue areas reflect a growing share of household debt. The green areas represent total net wealth, calculated as the sum of real estate and non-housing financial assets minus total liabilities.
+	
+	Again, while the axes differ across the four graphs, another consistent trend is evident: from 2010 to 2022, the wealthy have become wealthier, as shown by the increasingly pronounced right skew of the distributions. A persistent pattern throughout the period is that the value of real estate is lower than the total net wealth among affluent households, whereas less wealthy groups must rely on debt to hold property.
+	
+	
+	
+	\section{Empirical Strategy}
+	
+	This paper investigates the causal relationship between demographic structure changes and housing prices across Chinese cities, using monthly panel data. The empirical strategy combines an instrumental variable (IV) approach with a staggered difference-in-differences (DiD) design to address two main identification challenges: endogeneity of labor supply and policy timing of housing purchase restrictions.
+	
+	\subsection{Identification Framework}
+	
+	We hypothesize that historical fertility rates shape the current labor force and, through this channel, influence the housing market. Following \citet{mankiw1989baby}, we treat cohort fertility as a plausibly exogenous determinant of long-run demographic trends. Specifically, cities with higher fertility rates during 1990--2000 experienced greater growth in working-age population in the 2010s. This variation is used as an instrument for city-level labor supply.
+	
+	At the same time, staggered implementation of HPR policies across cities generates quasi-experimental variation that allows for identification of dynamic treatment effects. We adopt the event-study specification from \citet{sun2021estimating} to estimate policy impacts while accounting for heterogeneous treatment timing and potential anticipation.
+	
+	The two-stage least squares (2SLS) specification is as follows:
+	
+	\begin{align}
+		\text{EmploymentRate}_{it} &= \alpha_i + \lambda_t + \pi \cdot \text{NaturalGrowthRate}_{i,1990\text{-}2000} + X_{it} \eta + \nu_{it}, \\
+		\ln(\text{Price}_{it}) &= \alpha_i + \lambda_t + \beta \cdot \widehat{\text{EmploymentRate}}_{it} + \sum_{k \neq -1} \delta_k \cdot D_{i,t-E_i=k} + X_{it} \gamma + \varepsilon_{it},
+	\end{align}
+	
+	where:
+	\begin{enumerate}
+		\item $\text{EmploymentRate}_{it}$ is the people registered with a job over total number of registered residents in city $i$ at month $t$ (endogenous);
+		\item $\text{NaturalGrowthRate}_{i,1990\text{-}2000}$ is the pre-determined fertility instrument, by taking average of natural growth rate in 1990, 1995, 2000 for city $i$. The fertility rate was not found prior to 2008;
+		\item $D_{i,t-E_i=k}$ is an event-time indicator equal to 1 if month $t$ is $k$ periods away from HPR adoption in city $i$;
+		\item $X_{it}$ is a vector of time-varying controls (e.g., GDP per capita, population, fiscal revenue);
+		\item $\alpha_i$ and $\lambda_t$ are city and month fixed effects;
+		\item $\widehat{\text{EmploymentRate}}_{it}$ is the fitted value from the first-stage regression.
+	\end{enumerate}
+	
+	Standard errors are clustered at the city level to account for serial correlation.
+	
+	\subsection{Endogeneity of Policy Timing and Robustness}
+	
+	Since purchasing restriction policies may be enacted in response to rising housing prices, treatment timing is potentially endogenous. To address this concern, we include pre-policy leads of the event indicators to test for anticipatory effects. Following the literature on staggered adoption (\citealp{sun2021estimating}; \citealp{callaway2021difference}), we also estimate group-time average treatment effects (ATT) to relax the parallel trends assumption and account for covariate imbalance.
+	
+	\vspace{1em}
+	This empirical strategy therefore addresses both structural endogeneity and dynamic policy treatment, building on state-of-the-art methods in the DiD and IV literature.
+	
+	\section{Research Findings}\label{sec:results}
+	
+	\subsection{Main IV Regression Results}
+	This section summarizes the findings from a series of OLS and 2SLS regressions evaluating the causal relationship between labor supply and housing prices, using city-level panel data and a housing purchasing restriction (HPR) event study framework. The main results are reported in the following tables.
+	\begin{table}[H]
+		\centering
+		\caption{Main Regression Results: OLS and 2SLS}
+		\label{tab:main_results}
+		\begin{tabular}{lllll}
+			\toprule
+			&        OLS &               2SLS &  OLS &  2SLS \\
+			\midrule
+			Employment Rate &   -0.0218 &    0.1216 &   0.0130 &   -0.0318 \\
+			& (0.0619) & (0.1854) & (0.0773) & (0.1642) \\
+			ln(GDP per capita) &    0.0319 &  0.0726** & 0.0808** & 0.1572*** \\
+			& (0.0245) & (0.0369) & (0.0315) & (0.0440) \\
+			ln(Pension Participants) & 0.0525*** & 0.0644*** &                   &                    \\
+			& (0.0134) & (0.0166) &                   &                    \\
+			Observations &               9081 &                9081 &              8815 &                8815 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	Table~\ref{tab:main_results} reports the results from baseline OLS and 2SLS specifications. In OLS regressions, the employment rate shows no significant effect on housing prices; the coefficient is small and not statistically significant. When instrumented by historical natural population growth rates (1990s), the 2SLS coefficient becomes larger and positive, though still insignificant. The difference in magnitude and sign between OLS and IV estimates suggests the presence of endogeneity in labor supply measures. However, the first-stage F-statistics (approx.~5.4) indicate a potentially weak instrument.
+	
+	Both the log of per capita GDP and the log of urban pension insurance participants are consistently significant across model specifications. Specifically, a one-unit increase in $\ln(\text{GDP per capita})$ is associated with approximately 7--15\% higher log housing prices, depending on specification. Similarly, urban pension insurance coverage---a proxy for local social security depth and labor formality---is positively and significantly associated with housing prices. This highlights that local fiscal and demographic structures play a meaningful role in shaping demand.
+	\begin{table}[H]
+		\centering
+		\caption{First-Stage Regression Results}
+		\label{tab:first_stage}
+		\begin{tabular}{lll}
+			\toprule
+			&       First-stage & First-stage \\
+			\midrule
+			avg\_natural\_growth\_90s & 0.0208** & 0.0182** \\
+			& (0.0089) & (0.0088) \\
+			ln(GDP per capita) & 0.0680 & 0.1282** \\
+			& (0.0429) & (0.0495) \\
+			ln(Pension Participants) & 0.0598** & \\
+			& (0.0246) & \\
+			First-stage F-stat (clustered) & 5.47 & 4.87 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	\subsection{Dynamic Treatment Effects of Housing Purchasing Restriction Policies}
+	The event-study estimates of housing purchasing restrictions show strong and persistent effects on housing prices. Coefficients for months leading up to policy implementation (\(k < 0\)) are significantly negative, suggesting that housing markets exhibit anticipatory declines. Starting from the implementation month (\(k = 0\)), we observe a sharp and sustained drop in housing price levels, with cumulative log price declines reaching 16--19\% and persisting for at least two years post-treatment (\(k = 24\)). These findings confirm that HPR policies are effective in dampening real estate inflation, both through expectations and realized enforcement.
+	
+	These results underscore the long-term suppressive power of HPR on urban housing prices and validate the policy's effectiveness in mitigating speculative demand.
+	%---------------
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=15cm]{event_study_corrected_plot.png}
+		\caption{DiD -- IV Study of Housing Purchasing Restriction Policies}
+		
+	\end{figure}
+	
+	
+	\begin{table}[H]
+		\centering
+		\caption{Corrected Event Study Estimates with Pre- and Post-Treatment Periods}
+		\label{tab:eventstudy_corrected}
+		\begin{tabular}{rlrl}
+			\toprule
+			Event time (k) & Coefficient &  Std. Error &           95\% CI \\
+			\midrule
+			-12 &    -0.08*** &      0.0301 & [-0.139, -0.021] \\
+			-11 &  -0.0781*** &      0.0292 & [-0.135, -0.021] \\
+			-10 &  -0.0732*** &      0.0281 & [-0.128, -0.018] \\
+			-9 &  -0.0647*** &      0.0236 & [-0.111, -0.018] \\
+			-8 &   -0.057*** &      0.0195 & [-0.095, -0.019] \\
+			-7 &   -0.052*** &      0.0169 & [-0.085, -0.019] \\
+			-6 &  -0.0467*** &      0.0151 & [-0.076, -0.017] \\
+			-5 &  -0.0409*** &      0.0146 & [-0.069, -0.012] \\
+			-4 &   -0.0321** &      0.0135 & [-0.059, -0.006] \\
+			-3 &  -0.0756*** &      0.0178 & [-0.111, -0.041] \\
+			-2 &  -0.1227*** &      0.0161 & [-0.154, -0.091] \\
+			-1 &  -0.1491*** &      0.0162 & [-0.181, -0.117] \\
+			0 &  -0.1627*** &      0.0199 & [-0.202, -0.124] \\
+			1 &  -0.1595*** &      0.0200 & [-0.199, -0.120] \\
+			2 &  -0.1583*** &      0.0202 & [-0.198, -0.119] \\
+			3 &  -0.1576*** &      0.0204 & [-0.198, -0.118] \\
+			4 &  -0.1567*** &      0.0208 & [-0.197, -0.116] \\
+			5 &   -0.157*** &      0.0211 & [-0.198, -0.116] \\
+			6 &  -0.1575*** &      0.0214 & [-0.199, -0.116] \\
+			7 &  -0.1588*** &      0.0217 & [-0.201, -0.116] \\
+			8 &  -0.1613*** &      0.0220 & [-0.204, -0.118] \\
+			9 &  -0.1641*** &      0.0223 & [-0.208, -0.120] \\
+			10 &  -0.1664*** &      0.0228 & [-0.211, -0.122] \\
+			11 &  -0.1696*** &      0.0230 & [-0.215, -0.124] \\
+			12 &  -0.1741*** &      0.0232 & [-0.220, -0.129] \\
+			13 &  -0.1802*** &      0.0239 & [-0.227, -0.133] \\
+			14 &  -0.1852*** &      0.0247 & [-0.234, -0.137] \\
+			15 &  -0.1882*** &      0.0254 & [-0.238, -0.138] \\
+			16 &  -0.1898*** &      0.0262 & [-0.241, -0.139] \\
+			17 &  -0.1908*** &      0.0269 & [-0.244, -0.138] \\
+			18 &  -0.1928*** &      0.0275 & [-0.247, -0.139] \\
+			19 &  -0.1927*** &      0.0285 & [-0.248, -0.137] \\
+			20 &  -0.1935*** &      0.0292 & [-0.251, -0.136] \\
+			21 &  -0.1924*** &      0.0298 & [-0.251, -0.134] \\
+			22 &  -0.1879*** &      0.0303 & [-0.247, -0.128] \\
+			23 &  -0.1794*** &      0.0305 & [-0.239, -0.120] \\
+			24 &  -0.1696*** &      0.0299 & [-0.228, -0.111] \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	
+	Taken together, these results suggest that demographic structure (as proxied by employment and social security coverage) and local economic fundamentals significantly affect housing demand. Furthermore, housing purchasing restrictions appear to be a highly effective policy tool in curbing overheating in China's urban housing markets.
+	
+	
+	
+	
+	
+	
+	\section{Conclusion}\label{sec:conclusion}
+	This study examined the complex dynamics of China's housing market, focusing on the nexus of demographic change and policy intervention. The decades-long housing boom significantly shaped household wealth, with real estate constituting over 80\% of urban household assets, often financed through substantial leverage.
+	
+	The empirical analysis, leveraging a 70-city monthly panel dataset combined with an IV-staggered DiD approach, yielded several key findings. First, while historical demographic trends (fertility rates) were explored as drivers of current labor supply, the instrumental variable approach provided only weak evidence for a direct causal link between instrumented labor supply and housing prices in our specification, hampered by a low first-stage F-statistic. Second, local economic fundamentals, particularly GDP per capita, were confirmed as significant positive drivers of housing prices. Third, and most robustly, the staggered implementation of Housing Purchase Restrictions (HPR) was found to have a strong, statistically significant, and economically substantial negative impact on housing prices. The event study framework revealed anticipatory price declines before policy enactment, followed by a sharp drop upon implementation, leading to a cumulative price reduction of approximately 16-19\% over the subsequent two years. This highlights the effectiveness of such demand-side administrative measures in curbing speculative pressures and cooling the market, at least temporarily.
+	
+	The recent downturn in China's real estate market, evidenced by falling sales volumes and prices starting around 2021-2022 and continuing into 2024, validates the concerns raised about the sustainability of the previous boom and the systemic risks associated with high leverage and asset concentration. While our empirical results emphasize the effectiveness of HPR policies, they also implicitly point to the underlying vulnerabilities that necessitated such interventions.
+	
+	Limitations of this study include the weakness of the chosen instrument for labor supply. Future research could explore alternative IV strategies.
+	
+	\vfill
+	\pagebreak{}
+	\begin{spacing}{1.0}
+		\bibliographystyle{jpe}
+		\bibliography{References.bib}
+		\addcontentsline{toc}{section}{References}
+	\end{spacing}
+	
+	
+	
+	
+\end{document}
